@@ -6,7 +6,7 @@ Tequila-0004 is the testnet related to the columbus-4 mainnet, bombay-0008 is re
 ### How to use
 ```
 # checkout and cd to the directory
-# change the moniker and optionally the USER variable on lines 6 & 38
+# change the MONIKER and optionally the USER variables (multiple occurences)
 # then build the image:
 $ docker build --tag=terrad_tequila_01:v1 .
 
