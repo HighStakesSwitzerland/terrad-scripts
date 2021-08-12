@@ -7,7 +7,7 @@ ARG USER=tequila
 
 ###INSTALL ALL NECESSARY PACKAGES
 RUN apt update && apt upgrade -y
-RUN apt install -y build-essential git wget liblz4-tool nodejs npm jq curl lz4 vim net-tools libsecret-tools
+RUN apt install -y build-essential git wget liblz4-tool nodejs npm jq curl lz4 vim net-tools
 RUN apt autoremove -y
 
 ###CREATE NEW USER $USER

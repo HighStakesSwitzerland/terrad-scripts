@@ -7,7 +7,7 @@ ARG USER=terra
 
 ###INSTALL ALL NECESSARY PACKAGES
 RUN apt update && apt upgrade -y
-RUN apt install -y build-essential git wget liblz4-tool nodejs npm jq curl lz4 vim
+RUN apt install -y build-essential git wget liblz4-tool nodejs npm jq curl lz4 vim net-tools
 RUN apt autoremove -y
 
 ###CREATE NEW USER $USER
@@ -32,12 +32,10 @@ RUN echo "*                soft    nofile          65535" >> /etc/security/limit
 RUN echo "*                hard    nofile          65535" >> /etc/security/limits.conf
 
 
-FROM shell AS terrad
+FROM shell AS terrad-01
 
 ###INSTALL AND BUILD TERRA
 ARG MONIKER='Sentry-01'
-ARG ADDRESS_BOOK_URL=https://network.terra.dev/addrbook.json
-ARG GENESIS=https://columbus-genesis.s3-ap-northeast-1.amazonaws.com/columbus-4-genesis.json
 
 WORKDIR /home/$USER
 RUN git clone https://github.com/terra-project/core/
@@ -45,11 +43,15 @@ WORKDIR ./core
 RUN git checkout v0.4.6
 RUN . /etc/profile && LEDGER_ENABLED=false make install
 
+FROM terrad-01 AS terrad-02
+ARG MONIKER='Sentry-01'
+ARG USER=terra
+
 WORKDIR /home/$USER
 RUN mkdir /home/$USER/.terrad
 RUN chown $USER:$USER -R /home/$USER/.terrad
 
-RUN su $USER -c ". /etc/profile && terrad init \"$MONIKER\""
+RUN su $USER -c ". /etc/profile && terrad init --chain-id=columbus-4 \"$MONIKER\""
 
 #update app.toml and config.toml
 RUN sed -i 's#seeds = ""#seeds = "87048bf71526fb92d73733ba3ddb79b7a83ca11e@public-seed.terra.dev:26656,b5205baf1d52b6f91afb0da7d7b33dcebc71755f@public-seed2.terra.dev:26656,5d9b8ac70000bd4ab1de3ccaf85eb43f8e315146@seed.terra.delightlabs.io:26656"#' /home/$USER/.terrad/config/config.toml
@@ -65,12 +67,16 @@ RUN sed -i 's#max_num_inbound_peers = 40#max_num_inbound_peers = 100#' /home/$US
 RUN sed -i 's#max_num_outbound_peers = 10#max_num_outbound_peers = 100#' /home/$USER/.terrad/config/config.toml
 RUN sed -i 's#max_open_connections = 3#max_open_connections = 10#' /home/$USER/.terrad/config/config.toml
 
-RUN curl $GENESIS > /home/$USER/.terrad/config/genesis.json
-RUN curl $ADDRESS_BOOK_URL > /home/$USER/.terrad/config/addrbook.json
+FROM terrad-02
+ARG USER=terra
 
+ARG ADDRESS_BOOK_URL=https://network.terra.dev/addrbook.json
+ARG GENESIS=https://columbus-genesis.s3-ap-northeast-1.amazonaws.com/columbus-4-genesis.json
+
+RUN curl $GENESIS -o /home/$USER/.terrad/config/genesis.json
+RUN curl $ADDRESS_BOOK_URL -o /home/$USER/.terrad/config/addrbook.json
 RUN chown $USER:$USER -R /home/$USER/.terrad
-
-FROM terrad
+RUN chown $USER:$USER /home/$USER/
 
 ###LOGIN BY DEFAULT AS $USER
 USER $USER
