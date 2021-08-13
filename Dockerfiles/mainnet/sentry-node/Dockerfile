@@ -54,13 +54,15 @@ RUN chown $USER:$USER -R /home/$USER/.terrad
 RUN su $USER -c ". /etc/profile && terrad init --chain-id=columbus-4 \"$MONIKER\""
 
 #update app.toml and config.toml
-RUN sed -i 's#seeds = ""#seeds = "5d9b8ac70000bd4ab1de3ccaf85eb43f8e315146@seed.terra.delightlabs.io:26656"#' /home/$USER/.terrad/config/config.toml
+RUN sed -i 's#seeds = ""#seeds = "87048bf71526fb92d73733ba3ddb79b7a83ca11e@public-seed.terra.dev:26656,b5205baf1d52b6f91afb0da7d7b33dcebc71755f@public-seed2.terra.dev:26656,5d9b8ac70000bd4ab1de3ccaf85eb43f8e315146@seed.terra.delightlabs.io:26656"#' /home/$USER/.terrad/config/config.toml
+RUN sed -i '#persistent_peers = ""#persistent_peers = "94b784b64de26d2b624a409b22419a3121cbfdef@95.217.237.148:26656,5d76903068130a09e754f6230b127bf6a8cd634b@terra.sentries.us-west1.gcp.iqext.net:26656,5d76903068130a09e754f6230b127bf6a8cd634b@terra.sentries.us-east1.gcp.iqext.net:26656"#' /home/$USER/.terrad/config/config.toml
+
 #enable prometheus for monitoring from the host
 RUN sed -i 's#prometheus = false#prometheus = true#' /home/$USER/.terrad/config/config.toml
 #set minimum gas price (recommended) in order to enable anti-spam by rejecting incoming transactions with implied gas price less than a specified minimum
 RUN sed -i 's#minimum-gas-prices = ""#minimum-gas-prices = "0.01133uluna,0.15uusd,0.104938usdr,169.77ukrw,428.571umnt,0.125ueur,0.98ucny,16.37ujpy,0.11ugbp,10.88uinr,0.19ucad,0.14uchf,0.19uaud,0.2usgd,4.62uthb,1.25usek,1.25udkk,2180.0uidr,7.6uphp"#' /home/$USER/.terrad/config/app.toml
 #prevent node to gossip
-#RUN sed -i 's#pex = true#pex = false#' /home/$USER/.terrad/config/config.toml
+RUN sed -i 's#pex = true#pex = false#' /home/$USER/.terrad/config/config.toml
 #increasing a bit the cnx options decrease precommits and vote misses
 RUN sed -i 's#max_num_inbound_peers = 40#max_num_inbound_peers = 100#' /home/$USER/.terrad/config/config.toml
 RUN sed -i 's#max_num_outbound_peers = 10#max_num_outbound_peers = 100#' /home/$USER/.terrad/config/config.toml
