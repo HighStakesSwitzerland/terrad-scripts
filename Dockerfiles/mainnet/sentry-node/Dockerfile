@@ -55,7 +55,7 @@ RUN su $USER -c ". /etc/profile && terrad init --chain-id=columbus-4 \"$MONIKER\
 
 #update app.toml and config.toml
 RUN sed -i 's#seeds = ""#seeds = "87048bf71526fb92d73733ba3ddb79b7a83ca11e@public-seed.terra.dev:26656,b5205baf1d52b6f91afb0da7d7b33dcebc71755f@public-seed2.terra.dev:26656,5d9b8ac70000bd4ab1de3ccaf85eb43f8e315146@seed.terra.delightlabs.io:26656"#' /home/$USER/.terrad/config/config.toml
-RUN sed -i '#persistent_peers = ""#persistent_peers = "94b784b64de26d2b624a409b22419a3121cbfdef@95.217.237.148:26656,5d76903068130a09e754f6230b127bf6a8cd634b@terra.sentries.us-west1.gcp.iqext.net:26656,5d76903068130a09e754f6230b127bf6a8cd634b@terra.sentries.us-east1.gcp.iqext.net:26656"#' /home/$USER/.terrad/config/config.toml
+RUN sed -i 's#persistent_peers = ""#persistent_peers = "94b784b64de26d2b624a409b22419a3121cbfdef@95.217.237.148:26656,5d76903068130a09e754f6230b127bf6a8cd634b@terra.sentries.us-west1.gcp.iqext.net:26656,5d76903068130a09e754f6230b127bf6a8cd634b@terra.sentries.us-east1.gcp.iqext.net:26656"#' /home/$USER/.terrad/config/config.toml
 
 #enable prometheus for monitoring from the host
 RUN sed -i 's#prometheus = false#prometheus = true#' /home/$USER/.terrad/config/config.toml
