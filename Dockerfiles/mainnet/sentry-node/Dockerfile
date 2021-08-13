@@ -74,11 +74,9 @@ RUN sed -i 's#external_address = ""#external_address = "165.227.146.32:26656"#' 
 FROM terrad-02
 ARG USER=terra
 
-ARG ADDRESS_BOOK_URL=https://raw.githubusercontent.com/TerranStakers/terrad-scripts/main/Dockerfiles/mainnet/sentry-node/addrbook.json
 ARG GENESIS=https://columbus-genesis.s3-ap-northeast-1.amazonaws.com/columbus-4-genesis.json
 
 RUN curl $GENESIS -o /home/$USER/.terrad/config/genesis.json
-RUN curl $ADDRESS_BOOK_URL -o /home/$USER/.terrad/config/addrbook.json
 RUN chown $USER:$USER -R /home/$USER/.terrad
 RUN chown $USER:$USER /home/$USER/
 
