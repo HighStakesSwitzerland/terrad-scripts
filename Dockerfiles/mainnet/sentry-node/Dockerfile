@@ -67,7 +67,7 @@ RUN sed -i 's#max_num_outbound_peers = 10#max_num_outbound_peers = 100#' /home/$
 RUN sed -i 's#max_open_connections = 3#max_open_connections = 10#' /home/$USER/.terrad/config/config.toml
 RUN sed -i 's#proxy_app = "tcp://127.0.0.1:28658"#proxy_app = "tcp://0.0.0.0:28658"#' /home/$USER/.terrad/config/config.toml
 RUN sed -i 's#laddr = "tcp://127.0.0.1:26657#laddr = "tcp://0.0.0.0:26657"#' /home/$USER/.terrad/config/config.toml
-RUN sed -i 's#external_address = ""#external_address = "165.227.146.32:26656#" ' /home/$USER/.terrad/config/config.toml
+RUN sed -i 's#external_address = ""#external_address = "165.227.146.32:26656"#' /home/$USER/.terrad/config/config.toml
 
 FROM terrad-02
 ARG USER=terra
