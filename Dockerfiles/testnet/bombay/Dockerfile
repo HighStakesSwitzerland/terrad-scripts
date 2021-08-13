@@ -13,7 +13,7 @@ RUN apt autoremove -y
 ###CREATE NEW USER $USER
 RUN mkdir /home/$USER && useradd -d /home/$USER $USER && usermod -aG sudo $USER &&\ 
     echo $USER ALL=NOPASSWD: ALL >> /etc/sudoers &&\ 
-    sed -i 's#terra:/bin/sh#/terra:/bin/bash#' /etc/passwd
+    sed -i "s#$USER/bin/sh#$USER/bin/bash#" /etc/passwd
 
 ###EXPORT THE GO PATHS
 RUN echo "USER=$USER" >> /etc/profile
