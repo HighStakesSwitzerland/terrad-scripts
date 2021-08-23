@@ -19,7 +19,7 @@ After=network-online.target
 
 [Service]
 Type=simple
-ExecStart=/home/terra/terrad-scripts/monitoring/oracle-monitoring.sh
+ExecStart=/home/terra/terrad-scripts/monitoring/oracle-monitoring.sh your_terravaloper_address "https://lcd.terra.dev"
 Restart=always
 User=terra
 
